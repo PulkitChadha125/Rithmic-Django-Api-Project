@@ -98,7 +98,15 @@ import response_logout_pb2
 
 import request_tick_bar_replay_pb2
 import response_tick_bar_replay_pb2
+import sys
+import asyncio
+import pathlib
+import ssl
+import websockets
 
+# if len(sys.argv) != 6:
+#     print("SampleBar.py connect_point [system_name user_id password exchange symbol]")
+#     sys.exit(1)
 #   ===========================================================================
 
 USAGE   = "SampleBar.py connect_point [system_name user_id password exchange symbol]"
@@ -375,9 +383,9 @@ async def replay_tick_bars(ws, exchange, symbol):
     rq.template_id      = 206;
     rq.user_msg.append("hello")
 
-    rq.symbol       = symbol
-    rq.exchange     = exchange
-    rq.bar_type     = request_tick_bar_replay_pb2.RequestTickBarReplay.BarType.TICK_BAR
+    rq.symbol = symbol
+    rq.exchange= exchange
+    rq.bar_type= request_tick_bar_replay_pb2.RequestTickBarReplay.BarType.TICK_BAR
     rq.bar_type_specifier = "1"
 
     # sub-type refers to whether the bar is calculated from the beginning of the
@@ -421,55 +429,79 @@ async def disconnect_from_rithmic(ws):
     await ws.close(1000, "see you tomorrow")
 
 #   ===========================================================================
+once=True
 
-loop = asyncio.get_event_loop()
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    num_args = len(sys.argv)
+    if num_args == 2 or num_args == 8:
+        uri = sys.argv[1]
+        # (rest of the main code handling the connection and operations)
+        # check if we should use ssl/tls
+        ssl_context = None
+        if "wss://" in uri:
+            # Set up the ssl context.  One can also use an alternate SSL/TLS cert file
+            # or database
+            ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            localhost_pem = pathlib.Path(__file__).with_name("rithmic_ssl_cert_auth_params")
+            ssl_context.load_verify_locations(localhost_pem)
 
-num_args = len(sys.argv)
+        ws = loop.run_until_complete(connect_to_rithmic(uri, ssl_context))
 
-if num_args == 2 or num_args == 7:
-    uri = sys.argv[1]
+        if num_args == 2:
+            loop.run_until_complete(list_systems(ws))
+        elif num_args == 7:
+            system_name = sys.argv[2]
+            user_id = sys.argv[3]
+            password = sys.argv[4]
 
-    # check if we should use ssl/tls
-    ssl_context = None
-    if "wss://" in uri:
-        # Set up the ssl context.  One can also use an alternate SSL/TLS cert file
-        # or database
-        ssl_context   = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-        localhost_pem = pathlib.Path(__file__).with_name("rithmic_ssl_cert_auth_params")
-        ssl_context.load_verify_locations(localhost_pem)
+            if once == True:
+                loop.run_until_complete(rithmic_login(ws,
+                                                      system_name,
+                                                      request_login_pb2.RequestLogin.SysInfraType.HISTORY_PLANT,
+                                                      user_id,
+                                                      password))
+                once = False
 
-    ws = loop.run_until_complete(connect_to_rithmic(uri, ssl_context))
+            exchange = sys.argv[5]
+            symbol = sys.argv[6]
 
-    if num_args == 2:
-        loop.run_until_complete(list_systems(ws))
-    elif num_args == 7:
-        system_name = sys.argv[2]
-        user_id     = sys.argv[3]
-        password    = sys.argv[4]
-        
-        loop.run_until_complete(rithmic_login(ws,
-                                              system_name,
-                                              request_login_pb2.RequestLogin.SysInfraType.HISTORY_PLANT,
-                                              user_id,
-                                              password))
+            loop.run_until_complete(replay_tick_bars(ws, exchange, symbol))
 
-        exchange    = sys.argv[5]
-        symbol      = sys.argv[6]
+            loop.run_until_complete(consume(ws))
 
-        loop.run_until_complete(replay_tick_bars(ws, exchange, symbol))
+            if ws.open:
+                print(f"logging out ...")
+                loop.run_until_complete(rithmic_logout(ws))
+                print(f"disconnecting ...")
+                loop.run_until_complete(disconnect_from_rithmic(ws))
+                print(f"done!")
+            else:
+                print(f"connection appears to be closed.  exiting app.")
+    else:
+        print(f"{USAGE}")
+        print(f"{USAGE_2}")
 
-        loop.run_until_complete(consume(ws))
 
-        if ws.open:
-            print(f"logging out ...")
-            loop.run_until_complete(rithmic_logout(ws))
-            print(f"disconnecting ...")
-            loop.run_until_complete(disconnect_from_rithmic(ws))
-            print(f"done!")
-        else:
-            print(f"connection appears to be closed.  exiting app.")
-else:
-    print(f"{USAGE}")
-    print(f"{USAGE_2}")
 
-#   ===========================================================================
+    #   ===========================================================================
+
+
+# Import all required protobufs and utility functions used in SampleBar.py
+
+async def run_sample_bar(uri, system_name, user_id, password, exchange, symbol):
+    # Set up SSL
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    localhost_pem = pathlib.Path(__file__).with_name("rithmic_ssl_cert_auth_params")
+    ssl_context.load_verify_locations(localhost_pem)
+    # Connect to Rithmic
+    ws = await connect_to_rithmic(uri, ssl_context)
+    await rithmic_login(ws, system_name, "HISTORY_PLANT", user_id, password)
+    # Request tick bar data
+    await replay_tick_bars(ws, exchange, symbol)
+    # Consume messages (display or process tick data)
+    await consume(ws)
+    # Logout and disconnect if connection is still open
+    if ws.open:
+        await rithmic_logout(ws)
+        await disconnect_from_rithmic(ws)
