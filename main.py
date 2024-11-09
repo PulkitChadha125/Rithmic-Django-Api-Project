@@ -11,13 +11,15 @@ async def main():
     exchange = "CME"
     symbol = "ESZ4"
     side = "S"
-
+    quantity = 1  # Specify the quantity for the order
     # Fetch market data
     # await fetch_market_data(uri, system_name, user_id, password, exchange, symbol)
 
     # Place an order
     # await execute_order(uri, system_name, user_id, password, exchange, symbol, side)
-    await execute_order(uri, system_name, user_id, password, exchange, symbol, side)
+    await execute_order(uri, system_name, user_id, password, exchange, symbol, side, quantity)
+    # asyncio.run (execute_order(uri, system_name, user_id, password, exchange, symbol, side))
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,94 +1,49 @@
 import asyncio
-import pathlib
-import ssl
 import websockets
+import ssl
 
+# Protobuf Imports
 import base_pb2
-import request_account_list_pb2
-import response_account_list_pb2
-import request_heartbeat_pb2
-import response_heartbeat_pb2
+import exchange_order_notification_pb2
 import request_login_pb2
 import response_login_pb2
-import request_login_info_pb2
-import response_login_info_pb2
-import request_logout_pb2
-import response_logout_pb2
+import request_account_list_pb2
+import response_account_list_pb2
 import request_trade_routes_pb2
+import response_new_order_pb2
 import response_trade_routes_pb2
-import request_subscribe_for_order_updates_pb2
-import response_subscribe_for_order_updates_pb2
 import request_new_order_pb2
+import request_subscribe_for_order_updates_pb2
 import rithmic_order_notification_pb2
-import exchange_order_notification_pb2
 
-# Global variables for managing state
-g_rcvd_account = False
+# Globals
 g_fcm_id = ""
 g_ib_id = ""
 g_account_id = ""
-g_symbol = ""
-g_exchange = ""
-g_rcvd_trade_route = False
 g_trade_route = ""
-g_order_is_complete = False
-from rithmic_order_notification_pb2 import RithmicOrderNotification
-from exchange_order_notification_pb2 import ExchangeOrderNotification
-
-
-
-
-async def rithmic_order_notification_cb(msg_buf):
-    notification = RithmicOrderNotification()
-    notification.ParseFromString(msg_buf)
-    print("Rithmic Order Notification:")
-    print(f"  Template ID: {notification.template_id}")
-    print(f"  Notify Type: {notification.notify_type}")
-    print(f"  Status: {notification.status}")
-    print(f"  Account ID: {notification.account_id}")
-    print(f"  Symbol: {notification.symbol}")
-    print(f"  Exchange: {notification.exchange}")
-    # Add more fields as necessary for detailed logging
-
-async def exchange_order_notification_cb(msg_buf):
-    notification = ExchangeOrderNotification()
-    notification.ParseFromString(msg_buf)
-    print("Exchange Order Notification:")
-    print(f"  Template ID: {notification.template_id}")
-    print(f"  Notify Type: {notification.notify_type}")
-    print(f"  Status: {notification.status}")
-    print(f"  Account ID: {notification.account_id}")
-    print(f"  Symbol: {notification.symbol}")
-    print(f"  Exchange Order ID: {notification.exchange_order_id}")
-    # Add more fields as necessary for detailed logging
 
 async def connect_to_rithmic(uri, ssl_context):
     ws = await websockets.connect(uri, ssl=ssl_context, ping_interval=3)
-    print(f"Connected to {uri}")
+    print(f"Connected to WebSocket at {uri}")
     return ws
 
-async def rithmic_login(ws, system_name, infra_type, user_id, password):
+async def login(ws, user_id, password, system_name):
     rq = request_login_pb2.RequestLogin()
     rq.template_id = 10
-    rq.template_version = "5.27"  # Update this version as needed
-    rq.user_msg.append("hello")
     rq.user = user_id
     rq.password = password
-    rq.app_name = "SampleOrder.py"
-    rq.app_version = "0.3.0.0"
     rq.system_name = system_name
-    rq.infra_type = infra_type
+    rq.app_name = "RithmicApp"
+    rq.app_version = "1.0.0"
+    rq.infra_type = request_login_pb2.RequestLogin.SysInfraType.ORDER_PLANT
+    rq.template_version = "3.9"
+    await ws.send(rq.SerializeToString())
 
-    serialized = rq.SerializeToString()
-    await ws.send(serialized)
-
-    rp_buf = await ws.recv()
+    response = await ws.recv()
     rp = response_login_pb2.ResponseLogin()
-    rp.ParseFromString(rp_buf[0:])
+    rp.ParseFromString(response)
 
-    print(f"")
-    print(f"      ResponseLogin :")
-    print(f"      ===============")
+    print("\n      ResponseLogin :\n      ===============")
     print(f"        template_id : {rp.template_id}")
     print(f"   template_version : {rp.template_version}")
     print(f"           user_msg : {rp.user_msg}")
@@ -99,107 +54,196 @@ async def rithmic_login(ws, system_name, infra_type, user_id, password):
     print(f"         state_code : {rp.state_code}")
     print(f" heartbeat_interval : {rp.heartbeat_interval}")
     print(f"     unique_user_id : {rp.unique_user_id}")
-    print(f"")
 
+    if "0" in rp.rp_code:
+        global g_fcm_id, g_ib_id
+        g_fcm_id, g_ib_id = rp.fcm_id, rp.ib_id
+        return True
+    return False
 
-
-async def list_accounts(ws, fcm_id, ib_id):
-    global g_account_id, g_fcm_id, g_ib_id, g_rcvd_account
+async def fetch_account_info(ws):
+    print("\nRetrieving account list...")
     rq = request_account_list_pb2.RequestAccountList()
     rq.template_id = 302
-    rq.fcm_id = fcm_id
-    rq.ib_id = ib_id
-    serialized = rq.SerializeToString()
-    await ws.send(serialized)
-    rp_buf = await ws.recv()
-    rp = response_account_list_pb2.ResponseAccountList()
-    rp.ParseFromString(rp_buf)
-    if rp.rq_handler_rp_code and rp.rq_handler_rp_code[0] == "0":
-        g_fcm_id = rp.fcm_id
-        g_ib_id = rp.ib_id
-        g_account_id = rp.account_id
-        g_rcvd_account = True
-        print("Account information received:", g_account_id)
+    rq.fcm_id = g_fcm_id
+    rq.ib_id = g_ib_id
+    rq.user_type = 3
 
-async def list_trade_routes(ws):
-    global g_trade_route, g_rcvd_trade_route
+    await ws.send(rq.SerializeToString())
+    global g_account_id
+    g_account_id = None
+
+    while True:
+        rp_buf = await ws.recv()
+        rp = response_account_list_pb2.ResponseAccountList()
+        rp.ParseFromString(rp_buf)
+
+        print("\n ResponseAccountList :\n ====================")
+        print(f"         template_id : {rp.template_id}")
+        print(f"            user_msg : {rp.user_msg}")
+        print(f"  rq_handler_rp_code : {rp.rq_handler_rp_code}")
+        print(f"             rp code : {rp.rp_code}")
+        print(f"              fcm_id : {rp.fcm_id}")
+        print(f"              ib_id  : {rp.ib_id}")
+        print(f"          account_id : {rp.account_id}")
+        print(f"        account_name : {rp.account_name}")
+
+        if not rp.rq_handler_rp_code:
+            if "0" in rp.rp_code:
+                if g_account_id:
+                    return True
+                else:
+                    print("Failed to retrieve complete account list.")
+                    return False
+
+        if rp.rq_handler_rp_code and rp.rq_handler_rp_code[0] == "0" and rp.account_id:
+            g_account_id = rp.account_id
+
+async def fetch_trade_route_info(ws):
+    print("\nRetrieving trade routes...")
     rq = request_trade_routes_pb2.RequestTradeRoutes()
     rq.template_id = 310
-    serialized = rq.SerializeToString()
-    await ws.send(serialized)
-    rp_buf = await ws.recv()
-    rp = response_trade_routes_pb2.ResponseTradeRoutes()
-    rp.ParseFromString(rp_buf)
-    if rp.rq_handler_rp_code and rp.rq_handler_rp_code[0] == "0":
-        g_trade_route = rp.trade_route
-        g_rcvd_trade_route = True
-        print("Trade route received:", g_trade_route)
+    rq.subscribe_for_updates = False
+    await ws.send(rq.SerializeToString())
 
-async def new_order(ws, exchange, symbol, side):
+    global g_trade_route
+    g_trade_route = None
+
+    while True:
+        rp_buf = await ws.recv()
+        rp = response_trade_routes_pb2.ResponseTradeRoutes()
+        rp.ParseFromString(rp_buf)
+
+        print("\n ResponseTradeRoutes :\n =====================")
+        print(f"         template_id : {rp.template_id}")
+        print(f"            user_msg : {rp.user_msg}")
+        print(f"  rq_handler_rp_code : {rp.rq_handler_rp_code}")
+        print(f"             rp code : {rp.rp_code}")
+        print(f"              fcm_id : {rp.fcm_id}")
+        print(f"              ib_id  : {rp.ib_id}")
+        print(f"            exchange : {rp.exchange}")
+        print(f"         trade_route : {rp.trade_route}")
+        print(f"              status : {rp.status}")
+        print(f"          is_default : {rp.is_default}")
+
+        if not rp.rq_handler_rp_code:
+            if "0" in rp.rp_code:
+                if g_trade_route:
+                    return True
+                else:
+                    print("Failed to retrieve complete trade routes.")
+                    return False
+
+        if rp.rq_handler_rp_code and rp.rq_handler_rp_code[0] == "0" and rp.trade_route:
+            g_trade_route = rp.trade_route
+
+
+async def place_order(ws, symbol, side, quantity, exchange):
+    global g_fcm_id, g_ib_id, g_account_id, g_trade_route
+
+    # Debug output to verify field values
+    print("\n--- Order Request Debug ---")
+    print(f"Symbol: {symbol}")
+    print(f"Side: {'BUY' if side == 'B' else 'SELL'}")
+    print(f"Quantity: {quantity}")
+    print(f"FCM ID: {g_fcm_id}")
+    print(f"IB ID: {g_ib_id}")
+    print(f"Account ID: {g_account_id}")
+    print(f"Trade Route: {g_trade_route}")
+    print(f"Exchange: {exchange}")
+
+    # Building the order request
     rq = request_new_order_pb2.RequestNewOrder()
     rq.template_id = 312
     rq.fcm_id = g_fcm_id
     rq.ib_id = g_ib_id
     rq.account_id = g_account_id
-    rq.exchange = exchange
     rq.symbol = symbol
-    rq.quantity = 1
-    rq.transaction_type = request_new_order_pb2.RequestNewOrder.TransactionType.BUY if side == "B" else request_new_order_pb2.RequestNewOrder.TransactionType.SELL
-    rq.duration = request_new_order_pb2.RequestNewOrder.Duration.DAY
-    rq.price_type = request_new_order_pb2.RequestNewOrder.PriceType.MARKET
+    rq.quantity = int(quantity)  # Ensure quantity is an integer
+    rq.transaction_type = (
+        request_new_order_pb2.RequestNewOrder.BUY
+        if side == "B" else
+        request_new_order_pb2.RequestNewOrder.SELL
+    )
+    rq.exchange = exchange  # Set the exchange explicitly based on input
     rq.trade_route = g_trade_route
-    serialized = rq.SerializeToString()
-    await ws.send(serialized)
+    rq.price_type = request_new_order_pb2.RequestNewOrder.MARKET  # Assuming market order for simplicity
+    rq.duration = request_new_order_pb2.RequestNewOrder.DAY  # Assuming DAY as order duration
+    rq.manual_or_auto = request_new_order_pb2.RequestNewOrder.MANUAL  # Set manual or auto explicitly
+
+    await ws.send(rq.SerializeToString())
     print("Order request sent")
 
-async def rithmic_logout(ws):
-    rq = request_logout_pb2.RequestLogout()
-    rq.template_id = 12
-    await ws.send(rq.SerializeToString())
-    print("Logout request sent")
+    # Receive and process response
+    response_data = await ws.recv()
+    rp = response_new_order_pb2.ResponseNewOrder()
+    rp.ParseFromString(response_data)
 
-async def execute_order(uri, system_name, user_id, password, exchange, symbol, side):
-    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
-    localhost_pem = pathlib.Path(__file__).with_name("rithmic_ssl_cert_auth_params")
-    ssl_context.load_verify_locations(localhost_pem)
+    print("\nResponseNewOrder:")
+    print(f"  template_id: {rp.template_id}")
+    print(f"  user_msg: {rp.user_msg}")
+    print(f"  user_tag: {rp.user_tag}")
+    print(f"  rq_handler_rp_code: {rp.rq_handler_rp_code}")
+    print(f"  rp_code: {rp.rp_code}")
+    print(f"  basket_id: {rp.basket_id}")
+    print(f"  ssboe: {rp.ssboe}")
+    print(f"  usecs: {rp.usecs}")
 
-    ws = await connect_to_rithmic(uri, ssl_context)
-    print("Connected to WebSocket")
-
-    # Perform login
-    await rithmic_login(ws, system_name, request_login_pb2.RequestLogin.SysInfraType.ORDER_PLANT, user_id, password)
-    print("Login completed")
-
-    # Retrieve accounts
-    await list_accounts(ws, g_fcm_id, g_ib_id)
-    print(f"Account retrieved: {g_account_id}, Received Account: {g_rcvd_account}")
-
-    # Retrieve trade routes
-    await list_trade_routes(ws)
-    print(f"Trade route retrieved: {g_trade_route}, Received Trade Route: {g_rcvd_trade_route}")
-
-    # Check if account and trade route were received
-    if g_rcvd_account and g_rcvd_trade_route:
-        print("Proceeding with order placement")
-        await new_order(ws, exchange, symbol, side)
-        await consume(ws)
+    # Check for errors
+    if rp.rp_code and rp.rp_code[0] != '0':
+        print(f"Order failed with error: {rp.rp_code}")
     else:
-        print("Order execution aborted: Missing account or trade route information")
+        print("Order placed successfully")
 
-    if ws.open:
-        await rithmic_logout(ws)
+
+
+
+async def subscribe_for_order_updates(ws):
+    rq = request_subscribe_for_order_updates_pb2.RequestSubscribeForOrderUpdates()
+    rq.template_id = 309
+    await ws.send(rq.SerializeToString())
+    print("Subscribed for order updates")
+
+import asyncio
+from websockets.exceptions import ConnectionClosedError
+
+async def handle_order_updates(ws):
+    try:
+        while True:
+            try:
+                response_data = await asyncio.wait_for(ws.recv(), timeout=60)
+                # Process the response_data here, e.g., parse it and check for order updates
+
+            except asyncio.TimeoutError:
+                print("No updates received within timeout period. Exiting update handler.")
+                break  # Exit the loop if no data is received within the timeout
+
+            except ConnectionClosedError:
+                print("WebSocket connection closed unexpectedly. Exiting update handler.")
+                break  # Exit on unexpected disconnection
+
+    except ConnectionClosedError:
+        print("WebSocket connection was closed. Reconnecting...")
+        # Optionally: Add reconnection logic here
+
+    finally:
         await ws.close()
+        print("WebSocket connection closed.")
 
 
-async def consume(ws):
-    max_num_msgs = 20
-    for _ in range(max_num_msgs):
-        msg_buf = await ws.recv()
-        base = base_pb2.Base()
-        base.ParseFromString(msg_buf)
-        if base.template_id == 351:
-            await rithmic_order_notification_cb(msg_buf)
-        elif base.template_id == 352:
-            await exchange_order_notification_cb(msg_buf)
+async def execute_order(uri, system_name, user_id, password, exchange, symbol, side, quantity):
+    ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+    ws = await connect_to_rithmic(uri, ssl_context)
 
-# Place function calls for order processing as per integration with main.py
+    if await login(ws, user_id, password, system_name):
+        print("Login successful")
+        if await fetch_account_info(ws) and await fetch_trade_route_info(ws):
+            await place_order(ws, symbol, side, quantity, exchange)  # Pass exchange here
+            await handle_order_updates(ws)
+        else:
+            print("Account or trade route retrieval failed")
+    else:
+        print("Login failed")
+    await ws.close()
