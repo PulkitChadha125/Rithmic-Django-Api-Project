@@ -1,2 +1,0 @@
-Marktdata command : python SampleMd2.py wss://rituz00100.rithmic.com:443 "Rithmic Test" pulkitchadhaqwerty@gmail.com UBiKMPuY CME ESZ4
-Sample Buy order :python SampleOrder2.py wss://rituz00100.rithmic.com:443 "Rithmic Test" pulkitchadhaqwerty@gmail.com UBiKMPuY CME ESZ4 B
