@@ -1,0 +1,56 @@
+curl --location --request PUT 'http://xx.xx.xx.xx/api/run-rithmic/' \
+--header 'Content-Type: application/json' \
+--data '{
+    "uri": "wss://rituz00100.rithmic.com:443",
+    "system_name": "Rithmic Paper Trading",
+    "user_id": "23136617-DEMO",
+    "password": "110211082",
+    "exchange": "CME",
+    "symbol": "NQH5",
+    "side": "B",
+    "quantity": 1
+}'
+
+connected to wss://rituz00100.rithmic.com:443
+
+      ResponseLogin :
+      ===============
+        template_id : 11
+   template_version :
+           user_msg : ['hello']
+            rp code : ['1067', 'Rithmic System name received is invalid']
+             fcm_id :
+             ib_id  :
+       country_code :
+         state_code :
+ heartbeat_interval : 0.0
+     unique_user_id :
+
+
+ ResponseLoginInfo :
+ ===================
+       template_id : 75
+          user_msg : ['hello']
+           rp code : ['1034', 'invalid operation before login.']
+            fcm_id :
+            ib_id  :
+        first_name :
+         last_name :
+         user_type : 0 (ADMIN)
+
+
+     g_rcvd_account : False
+           g_fcm_id :
+            g_ib_id :
+       g_account_id :
+
+         g_exchange : CME
+           g_symbol : NQH5
+
+ g_rcvd_trade_route : False
+      g_trade_route :
+
+logging out ...
+disconnecting ...
+done!
+

@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  web:
+    platform: linux/amd64
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile  # Path to Dockerfile from context
+    ports:
+      - "8000:8000"
+    image: 904233107208.dkr.ecr.us-east-1.amazonaws.com/rithmic_app:latest
+    environment:
+      - DJANGO_SECRET_KEY=rithmic-secret-key
+    restart: always

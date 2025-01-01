@@ -1,0 +1,13 @@
+curl --location --request PUT 'http://xx.xx.xx.xx/api/run-rithmic/' \
+--header 'Content-Type: application/json' \
+--data '{
+    "uri": "wss://rituz00100.rithmic.com:443",
+    "system_name": "Rithmic Test",
+    "user_id": "pulkitchadhaqwerty@gmail.com",
+    "password": "UBiKMPuY",
+    "exchange": "CME",
+    "symbol": "NQH5",
+    "side": "B",
+    "quantity": 1
+}'
+

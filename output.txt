@@ -1,0 +1,690 @@
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 02, 2024 - 17:25:48
+Django version 3.2.25, using settings 'myproject.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CONTROL-C.
+connected to wss://rituz00100.rithmic.com:443
+
+      ResponseLogin :
+      ===============
+        template_id : 11
+   template_version : 5.27
+           user_msg : ['hello']
+            rp code : ['0']
+             fcm_id : Rithmic-FCM
+             ib_id  : Prospects
+       country_code : US
+         state_code : NY
+ heartbeat_interval : 60.0
+     unique_user_id : rproto_srvr_01_uat@rithmic_uat_domain:182
+
+
+ ResponseLoginInfo :
+ ===================
+       template_id : 301
+          user_msg : ['hello']
+           rp code : ['0']
+            fcm_id : Rithmic-FCM
+            ib_id  : Prospects
+        first_name : Pulkit
+         last_name : Chadha
+         user_type : 3 (TRADER)
+
+retrieving account list ...
+
+ ResponseAccountList :
+ =====================
+         template_id : 303
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+          account_id : PC31976
+        account_name : Pulkit Chadha
+
+
+ ResponseAccountList :
+ =====================
+         template_id : 303
+            user_msg : ['hello']
+  rq_handler_rp_code : []
+             rp code : ['0']
+              fcm_id : 
+              ib_id  : 
+          account_id : 
+        account_name : 
+
+retrieving trade routes ...
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : WCE
+         trade_route : ice
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : NYBOT
+         trade_route : ice
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : CME-CBOT
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : NYMEX-DME
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : KLSE
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : MGEX-CBOT
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : MEXDER
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : KRX
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : COMEX
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : CBOT
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : DME
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : BMF
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : KCBT
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : MGEX
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : NYMEX
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : ['0']
+             rp code : []
+              fcm_id : Rithmic-FCM
+              ib_id  : Prospects
+            exchange : CME
+         trade_route : globex
+              status : UP
+          is_default : True
+
+
+ ResponseTradeRoutes :
+ =====================
+         template_id : 311
+            user_msg : ['hello']
+  rq_handler_rp_code : []
+             rp code : ['0']
+              fcm_id : 
+              ib_id  : 
+            exchange : 
+         trade_route : 
+              status : 
+          is_default : False
+
+
+     g_rcvd_account : True
+           g_fcm_id : Rithmic-FCM
+            g_ib_id : Prospects
+       g_account_id : PC31976
+
+         g_exchange : CME
+           g_symbol : NQZ4
+
+ g_rcvd_trade_route : True
+      g_trade_route : globex
+
+#### Consume ####
+sent heartbeat request
+waiting for msg ...
+received msg 1 of 20
+ consumed msg : response_subscribe_for_order_updates (309)
+waiting for msg ...
+received msg 2 of 20
+ consumed msg : heartbeat response (19)
+waiting for msg ...
+received msg 3 of 20
+ consumed msg : response_new_order (313)
+waiting for msg ...
+received msg 4 of 20
+ consumed msg : response_new_order (313)
+waiting for msg ...
+received msg 5 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : ORDER_RCVD_FROM_CLNT (1)
+              is_snapshot : False
+                   status : Order received from client
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 
+          instrument_type : 
+                 quantity : 1
+                    price : 0
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : 
+    orig_sequence_number  : 
+     cor_sequence_number  : 
+                currency  : 
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 924123
+
+waiting for msg ...
+received msg 6 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : OPEN_PENDING (4)
+              is_snapshot : False
+                   status : open pending
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 
+          instrument_type : Future
+                 quantity : 0
+                    price : 0
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 924694
+
+waiting for msg ...
+received msg 7 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : ORDER_RCVD_BY_EXCH_GTWY (7)
+              is_snapshot : False
+                   status : order received by exch gateway
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 
+          instrument_type : Future
+                 quantity : 0
+                    price : 0
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 925130
+
+waiting for msg ...
+received msg 8 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : ORDER_SENT_TO_EXCH (10)
+              is_snapshot : False
+                   status : order sent to exch
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 
+          instrument_type : Future
+                 quantity : 0
+                    price : 0
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 925256
+
+waiting for msg ...
+received msg 9 of 20
+ consumed msg : exchange_order_notification (352)
+
+ ExchangeOrderNotification : 
+               template_id : 352
+               notify_type : STATUS (1)
+               is_snapshot : False
+              report_type : status
+                   status : 
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 681314560425
+          instrument_type : Future
+                 quantity : 0
+                    price : 20868.5
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+           confirmed_size : 1
+           confirmed_time : 17:26:08
+           confirmed_date : 20241202
+             confirmed_id : 68902:405542
+            modified_size : 0
+            modified_time : 
+            modified_date : 
+               modify_id  : 
+           cancelled_size : 0
+           cancelled_time : 
+           cancelled_date : 
+            cancelled_id  : 
+               fill_price : 0
+                fill_size : 0
+                fill_time : 
+                fill_date : 
+                 fill_id  : 
+              trigger_id  : 
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 944483
+       exch_receipt_ssboe : 0
+       exch_receipt_nsecs : 0
+
+waiting for msg ...
+received msg 10 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : OPEN (13)
+              is_snapshot : False
+                   status : open
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 681314560425
+          instrument_type : Future
+                 quantity : 1
+                    price : 20868.5
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 944483
+
+waiting for msg ...
+received msg 11 of 20
+ consumed msg : exchange_order_notification (352)
+
+ ExchangeOrderNotification : 
+               template_id : 352
+               notify_type : FILL (5)
+               is_snapshot : False
+              report_type : fill
+                   status : 
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 681314560425
+          instrument_type : Future
+                 quantity : 0
+                    price : 20868.5
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+           confirmed_size : 0
+           confirmed_time : 
+           confirmed_date : 
+             confirmed_id : 
+            modified_size : 0
+            modified_time : 
+            modified_date : 
+               modify_id  : 
+           cancelled_size : 0
+           cancelled_time : 
+           cancelled_date : 
+            cancelled_id  : 
+               fill_price : 20883.5
+                fill_size : 1
+                fill_time : 17:26:08
+                fill_date : 20241202
+                 fill_id  : 68902:M:51513TN0005163
+              trigger_id  : 
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 944650
+       exch_receipt_ssboe : 0
+       exch_receipt_nsecs : 0
+
+waiting for msg ...
+received msg 12 of 20
+ consumed msg : rithmic_order_notification (351)
+
+ RithmicOrderNotification : 
+              template_id : 351
+              notify_type : COMPLETE (15)
+              is_snapshot : False
+                   status : complete
+                basket_id : 177418210
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : NQZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 681314560425
+          instrument_type : Future
+                 quantity : 1
+                    price : 20868.5
+            trigger_price : 0
+         transaction_type : SELL (2)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETE2Y
+    orig_sequence_number  : ETE2Y
+     cor_sequence_number  : ETE2Y
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1733160368
+                    usecs : 944650
+
+order is complete ...
+logging out ...
+disconnecting ...
+done!

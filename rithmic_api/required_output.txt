@@ -1,0 +1,33 @@
+notify_type : COMPLETE (15)
+              is_snapshot : False
+                   status : complete
+                basket_id : 177417656
+       original_basket_id : 
+                   fcm_id : Rithmic-FCM
+                    ib_id : Prospects
+               account_id : PC31976
+                  user_id : pulkitchadhaqwerty@gmail.com
+                   symbol : ESZ4
+                 exchange : CME
+           trade_exchange : CME
+              trade_route : globex
+        exchange_order_id : 641005534743
+          instrument_type : Future
+                 quantity : 1
+                    price : 6009.25
+            trigger_price : 0.0
+         transaction_type : BUY (1)
+                duration  : DAY (1)
+               price_type : MARKET (2)
+          orig_price_type : MARKET (2)
+           manual_or_auto : LIMIT (1)
+         sequence_number  : ETDMH
+    orig_sequence_number  : ETDMH
+     cor_sequence_number  : ETDMH
+                currency  : USD
+            country_code  : 
+                    text  : 
+              report_text : 
+                 remarks  : 
+                    ssboe : 1732026582
+                    usecs : 819953
