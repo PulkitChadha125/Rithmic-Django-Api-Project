@@ -1,0 +1,33 @@
+Code updates - 
+    1. New PUT endpoint (views.py) to place orders via rithmic.
+    2. New mqtt_publisher app to connect to mqtt broker and publish the messages to MQTT queue using the topics defined in the settings.
+    3. New docker files for containerizing and deploying the application.
+
+Deployment - 
+The code is deployed to AWS ECS cluster Rithmic-Cluster and served through an application load balancer. 
+To ensure auto scaling an auto scaling gateway and created for the cluster and tied to the service rithmic-app-http-service, which will run a single task by default and scale up to 5 tasks during high load periods
+The task definition is set up with internal healthcheck to ensure failing tasks are auto rebooted and the application is always up and running.
+
+
+Monitoring - 
+To connect to the container running the task - 
+1. Install AWS CLI and login to your AWs account from the command line using the command - 
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 904233107208.dkr.ecr.us-east-1.amazonaws.com
+
+Give it your login id and password (IDeally API key and secret, created from the AWS console)
+
+2. Get the id of the task running the container on AWS from the ECR dashboard - Navigate to ECR -> Rithmic-Cluster -> rithmic-app-http-service
+Click on Tasks and copy the task id, and run the command - 
+
+aws ecs execute-command \
+    --cluster Rithmic-Cluster \
+    --task <task-id> \
+    --container rithmic \
+    --command "/bin/bash" \
+    --interactive
+
+
+This will ssh into the container and allow you to monitor the container logs. The logs can also be monitored on AWS cloudwatch by going to the logs tab under the service on ECR page.
+
+Recommended Updates - 
+Various credentials are stored across code files. These should be moved to environment files and be treated as secrets instead of keeping as plain text in code.
