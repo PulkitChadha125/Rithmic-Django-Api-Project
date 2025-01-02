@@ -2,6 +2,7 @@ Code updates -
     1. New PUT endpoint (views.py) to place orders via rithmic.
     2. New mqtt_publisher app to connect to mqtt broker and publish the messages to MQTT queue using the topics defined in the settings.
     3. New docker files for containerizing and deploying the application.
+    4. A sample monitor_mqtt_client.py file to monitor mqtt queue and read messages being published to it.
 
 Deployment - 
 The code is deployed to AWS ECS cluster Rithmic-Cluster and served through an application load balancer. 
