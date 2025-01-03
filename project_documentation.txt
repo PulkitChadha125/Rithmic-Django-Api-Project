@@ -9,7 +9,6 @@ The code is deployed to AWS ECS cluster Rithmic-Cluster and served through an ap
 To ensure auto scaling an auto scaling gateway and created for the cluster and tied to the service rithmic-app-http-service, which will run a single task by default and scale up to 5 tasks during high load periods
 The task definition is set up with internal healthcheck to ensure failing tasks are auto rebooted and the application is always up and running.
 
-
 Monitoring - 
 To connect to the container running the task - 
 1. Install AWS CLI and login to your AWs account from the command line using the command - 
@@ -32,3 +31,8 @@ This will ssh into the container and allow you to monitor the container logs. Th
 
 Recommended Updates - 
 Various credentials are stored across code files. These should be moved to environment files and be treated as secrets instead of keeping as plain text in code.
+
+Updating the code
+Everytime we make changes, build the docker container using - docker-compose -f docker-compose.yml build
+Push the docker container using - docker push 904233107208.dkr.ecr.us-east-1.amazonaws.com/rithmic_app:latest
+
