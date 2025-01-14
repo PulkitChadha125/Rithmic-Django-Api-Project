@@ -45,8 +45,8 @@ class WebsocketClientConfig(AppConfig):
         # Avoid running on Django auto-reload
         import sys
 
-        if "runserver" not in sys.argv:
-            return
+        # if "runserver" not in sys.argv:
+        #     return
 
         from .server.server import WebSocketServer
         from django.conf import settings

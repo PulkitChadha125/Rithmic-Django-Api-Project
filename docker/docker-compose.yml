@@ -8,6 +8,7 @@ services:
       dockerfile: docker/Dockerfile  # Path to Dockerfile from context
     ports:
       - "8000:8000"
+      - "8081:8081"
     image: 904233107208.dkr.ecr.us-east-1.amazonaws.com/rithmic_app:latest
     environment:
       - DJANGO_SECRET_KEY=rithmic-secret-key

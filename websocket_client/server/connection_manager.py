@@ -121,13 +121,14 @@ class ConnectionManager:
     async def remove_connection(self, connection_id):
         """Remove a connection and cleanup."""
         async with self.lock:
-            if connection_id in self.connections:
+            for connection_id in self.connections.keys():
                 connection = self.connections[connection_id]
                 connection.is_active = False
                 if connection.client:
                     await connection.client.close()
-                del self.connections[connection_id]
                 logger.info(f"Removed connection {connection_id}")
+            self.connections = {}
+            self.client = None
 
     async def check_connections(self):
         """Check connection health and remove stale ones."""

@@ -104,3 +104,46 @@ class RithmicApiView(APIView):
             return Response({"RithmicOrderNotification": response}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def delete(self, request):
+        """
+        API endpoint to unsubscribe from market data.
+        Expects connection_id in the request data.
+        """
+        logger.info(f"Received unsubscribe request: {request.data}")
+
+        # Get connection ID from request
+        connection_id = "All"
+
+        # Validate parameters
+        if not connection_id:
+            return Response({"error": "connection_id is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Call the unsubscribe endpoint of the WebSocket server
+            response = async_to_sync(self._unsubscribe_market_data)(connection_id)
+
+            return Response(
+                {"message": "Successfully unsubscribed from market data.", "connection_id": connection_id},
+                status=status.HTTP_200_OK,
+            )
+        except Exception as e:
+            logger.error(f"Error in unsubscribe: {e}")
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    async def _unsubscribe_market_data(self, connection_id):
+        """Async method to unsubscribe from market data through the WebSocket server."""
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"http://{settings.RITHMIC_SERVER['HOST']}:{settings.RITHMIC_SERVER['PORT']}/unsubscribe",
+                    json={"connection_id": connection_id},
+                ) as response:
+                    if response.status != 200:
+                        error_data = await response.json()
+                        raise Exception(f"Failed to unsubscribe: {error_data.get('message', 'Unknown error')}")
+
+                    return await response.json()
+        except Exception as e:
+            logger.error(f"Error in _unsubscribe_market_data: {e}")
+            raise

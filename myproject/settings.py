@@ -139,7 +139,7 @@ MQTT_CONFIG = {
     "USE_TLS": False,  # Set to True if using SSL/TLS
     "TLS_CERT_PATH": None,  # Path to certificate if using SSL/TLS
     "CLEAN_SESSION": True,
-    "TOPIC": ["dev-prices", "ask-bid-rithmic"],
+    "TOPIC": ["dev-prices", "ask-bid-rithmic", "test-local"],
 }
 
 
