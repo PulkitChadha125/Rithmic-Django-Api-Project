@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rithmicapp",
     "mqtt_publisher.apps.MqttPublisherConfig",
+    "websocket_client.apps.WebsocketClientConfig",
 ]
 
 MIDDLEWARE = [
@@ -139,4 +140,20 @@ MQTT_CONFIG = {
     "TLS_CERT_PATH": None,  # Path to certificate if using SSL/TLS
     "CLEAN_SESSION": True,
     "TOPIC": ["dev-prices", "ask-bid-rithmic"],
+}
+
+
+# WEBSOCKET SERVER
+WS_SERVER_CONFIG = {
+    "URI": "wss://rituz00100.rithmic.com:443",
+    "SYSTEM_NAME": "Rithmic Test",
+    "USER_ID": "pulkitchadhaqwerty@gmail.com",
+    "PASSWORD": "UBiKMPuY",
+}
+
+RITHMIC_SERVER = {
+    "HOST": "0.0.0.0",
+    "PORT": 8081,
+    "HEARTBEAT_INTERVAL": 30,
+    "CONNECTION_TIMEOUT": 300,
 }

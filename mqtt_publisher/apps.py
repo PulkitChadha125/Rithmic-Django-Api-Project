@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rithmic")
 
 
 class MqttPublisherConfig(AppConfig):

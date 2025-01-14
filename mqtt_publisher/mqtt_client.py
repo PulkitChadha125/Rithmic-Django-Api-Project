@@ -5,7 +5,7 @@ import ssl
 from django.conf import settings
 from threading import Lock
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rithmic")
 
 
 class SingletonMQTTClient:
@@ -85,7 +85,8 @@ class MQTTClient(SingletonMQTTClient):
             logger.error(f"Failed to connect to MQTT broker: {self._last_error}")
 
     def on_publish(self, client, userdata, mid):
-        logger.info(f"Message {mid} published successfully")
+        pass
+        # logger.info(f"Message {mid} published successfully")
 
     def on_disconnect(self, client, userdata, rc):
         self._is_connected = False

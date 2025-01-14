@@ -1,0 +1,47 @@
+wsl.exe --install -d ubuntu
+
+
+Please run the following command as administrator inside the PowerShell :
+Enable-WindowsOptionalFeature -Online -FeatureName $("VirtualMachinePlatform", "Microsoft-Windows-Subsystem-Linux")
+
+You might need to restart the server afterwards and check if docker runs normally after. 
+
+Thank you!
+
+Kind Regards, 
+
+Dennis Illarionov
+
+System EngineerKamatera Inc.
+
+
+
+
+https://904233107208.signin.aws.amazon.com/console
+
+https://904233107208.signin.aws.amazon.com/console
+saurabh
+Password123!
+
+
+sudo docker run -p 8000:8000 --restart=always copa6/rithmic_app:latest
+
+
+IAM - List Roles, Add roles, ecr:DescribeRepositories iam:ListRoles
+
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 904233107208.dkr.ecr.us-east-1.amazonaws.com
+
+
+aws ecs update-service --service rithmic-app-http-service --cluster Rithmic-Cluster \
+  --region us-east-1 \
+  --enable-execute-command 
+
+
+
+aws ecs execute-command \
+    --cluster Rithmic-Cluster \
+    --task 15bef6304e7841c080b412ec7a944ed3 \
+    --container rithmic \
+    --command "/bin/bash" \
+    --interactive
+

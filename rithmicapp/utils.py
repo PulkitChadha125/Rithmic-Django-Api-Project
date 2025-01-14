@@ -3,7 +3,7 @@ from django.db import connections
 from functools import wraps
 import logging
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rithmic")
 
 
 def run_in_background(func):

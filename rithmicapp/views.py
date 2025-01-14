@@ -1,3 +1,5 @@
+# rithmicapp/views.py
+
 from django.shortcuts import render
 
 from rest_framework.views import APIView
@@ -7,12 +9,14 @@ import pathlib
 from rithmic_api.SampleMD import run_rithmic  # Import your function
 from rithmic_api.SampleOrder_requests import place_rithmic_order
 import ssl
+import aiohttp
 import logging
+from asgiref.sync import async_to_sync
 from django.conf import settings
 from mqtt_publisher.mqtt_client import get_mqtt_client
 from .utils import run_in_background
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rithmic")
 
 
 @run_in_background
@@ -46,10 +50,43 @@ class RithmicApiView(APIView):
 
         # Call the run_rithmic function
         try:
-            run_rithmic_background(uri, system_name, user_id, password, exchange, symbol)
-            return Response({"message": "Rithmic function executed successfully."}, status=status.HTTP_200_OK)
+            settings.WS_SERVER_CONFIG.update(
+                {
+                    "URI": uri,
+                    "SYSTEM_NAME": system_name,
+                    "USER_ID": user_id,
+                    "PASSWORD": password,
+                }
+            )
+            response = async_to_sync(self._subscribe_market_data)(exchange, symbol)
+            return Response(
+                {
+                    "message": "Successfully subscribed to market data.",
+                    "connection_id": response.get("connection_id"),
+                    "symbol": symbol,
+                    "exchange": exchange,
+                },
+                status=status.HTTP_200_OK,
+            )
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    async def _subscribe_market_data(self, exchange, symbol):
+        """Async method to subscribe to market data through the WebSocket server."""
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"http://{settings.RITHMIC_SERVER['HOST']}:{settings.RITHMIC_SERVER['PORT']}/subscribe",
+                    json={"exchange": exchange, "symbol": symbol},
+                ) as response:
+                    if response.status != 200:
+                        error_data = await response.json()
+                        raise Exception(f"Failed to subscribe: {error_data.get('message', 'Unknown error')}")
+
+                    return await response.json()
+        except Exception as e:
+            logger.error(f"Error in _subscribe_market_data: {e}")
+            raise
 
     def put(self, request):
         logger.info(f"Received data: {request.data}")
